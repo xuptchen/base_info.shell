@@ -1,0 +1,10 @@
+#!/bin/bash
+  default_ip=$(ifconfig|head -n 2|tail -n 1|cut -d ":" -f 2|cut -d " " -f 1)
+  product_name=$(dmidecode -t1|grep Name|cut -d " " -f 3)
+  serial_number=$(dmidecode -t1|grep Serial|cut -d " " -f 3)
+  cpu_count=$(dmidecode|grep CPU|grep Version|wc -l)
+  cpu_name=$(dmidecode|grep CPU|grep Version|cut -d " " -f 2-|uniq)
+  mem_total=$(cat /proc/meminfo|head -n 1|tr -s [:space:]|cut -d ' ' -f 2-)
+  disk_size=$(fdisk -l|grep "Disk /dev/sda"|grep -v GPT|cut -d " " -f 3-|cut -d "," -f 1)
+  disk_name=$(smartctl -a /dev/sda|grep "Product:"|awk '{print $2}')
+  disk_serial_number=$(smartctl -a /dev/sda|grep "Serial number:"|awk '{print $3}')
